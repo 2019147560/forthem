@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
@@ -22,9 +22,16 @@ const STEP_DEFS = [
   { label: '완료' },
 ];
 
-export default function ApplyPage({ params }: { params: { id: string } }) {
-  const p = PROGRAMS.find((x) => x.id === params.id);
-  if (!p) notFound();
+export default function ApplyPage({ params }: { params: Promise<{ id: string }> }) {
+  const [programId, setProgramId] = useState<string | null>(null);
+  
+  useEffect(() => {
+    params.then(({ id }) => setProgramId(id));
+  }, [params]);
+
+  const p = programId ? PROGRAMS.find((x) => x.id === programId) : null;
+  if (!p && programId) notFound();
+  if (!p) return null;
 
   const router = useRouter();
   const [step, setStep] = useState(0);
