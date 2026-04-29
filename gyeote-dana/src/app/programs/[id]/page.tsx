@@ -12,7 +12,7 @@ export function generateStaticParams() {
   return PROGRAMS.map((p) => ({ id: p.id }));
 }
 
-export default function ProgramDetailPage({ params }: Props) {
+export default function ProgramDetailPage({ params }: any) {
   const p = PROGRAMS.find((x) => x.id === params.id);
   if (!p) notFound();
 
