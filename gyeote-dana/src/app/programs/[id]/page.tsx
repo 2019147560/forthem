@@ -5,15 +5,16 @@ import Crumb from '@/components/Crumb';
 import Icon from '@/components/ui/Icon';
 
 interface Props {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export function generateStaticParams() {
   return PROGRAMS.map((p) => ({ id: p.id }));
 }
 
-export default function ProgramDetailPage({ params }: any) {
-  const p = PROGRAMS.find((x) => x.id === params.id);
+export default async function ProgramDetailPage({ params }: Props) {
+  const { id } = await params;
+  const p = PROGRAMS.find((x) => x.id === id);
   if (!p) notFound();
 
   const status = p.status === '현재 신청 가능' ? 'live' : p.status === '모집 예정' ? 'soon' : 'closed';
